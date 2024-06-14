@@ -14,62 +14,84 @@ std::string toLowerCase(const std::string& str) {
 }
 
 
-Game_Screen::Game_Screen(sf::Color background, sf::Color font_color, sf::Font font, sf::RenderWindow *w)
+Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vector<Word> words)
 {
+    this->appContainer = container;
+    if (!words.empty()) {this->shown_words = words;}
     //prepeare screen
     this->window = w;
-    read_file(file_name);
+    read_file();
     //prepere widgets
+
     auto background_rec = sf::RectangleShape(sf::Vector2f(800, 600));
     background_rec.setPosition(0, 0);
-    background_rec.setFillColor(background);
+    background_rec.setFillColor(appContainer->get_background().first);
+    sf::Font font;
+    if (!font.loadFromFile("../fonts/"+appContainer->get_font() + ".ttf"))
+    {
+        // error...
+    }
     sf::Text input_text;
     input_text.setPosition(10, 560);
     input_text.setCharacterSize(24);
-    input_text.setFillColor(font_color);
+    input_text.setFillColor(appContainer->get_font_color().first);
     input_text.setFont(font);
     sf::Text points_text;
     points_text.setPosition(500, 560);
     points_text.setCharacterSize(24);
-    points_text.setFillColor(font_color);
+    points_text.setFillColor(appContainer->get_font_color().first);
     points_text.setFont(font);
     points_text.setStyle(sf::Text::Underlined);
     sf::Text result_text;
     result_text.setPosition(400, 300);
     result_text.setCharacterSize(30);
-    result_text.setFillColor(font_color);
+    result_text.setFillColor(appContainer->get_font_color().first);
     result_text.setFont(font);
     sf::Text play_again;
     play_again.setPosition(100, 450);
     play_again.setCharacterSize(30);
-    play_again.setFillColor(font_color);
+    play_again.setFillColor(appContainer->get_font_color().first);
     play_again.setFont(font);
     sf::Text go_back;
     go_back.setPosition(400, 450);
     go_back.setCharacterSize(30);
-    go_back.setFillColor(font_color);
+    go_back.setFillColor(appContainer->get_font_color().first);
     go_back.setFont(font);
-    while (window->isOpen()) {
-        if (state == GameScreenState::play) {
+    sf::Text resume;
+    resume.setPosition(100, 450);
+    resume.setCharacterSize(30);
+    resume.setFillColor(appContainer->get_font_color().first);
+    resume.setFont(font);
+    sf::Text save;
+    save.setPosition(400, 450);
+    save.setCharacterSize(30);
+    save.setFillColor(appContainer->get_font_color().first);
+    save.setFont(font);
+    while (window->isOpen())
+    {
+        if (state == GameScreenState::play)
+        {
             auto event = sf::Event();
             while (window->pollEvent(event)) {
                 if (event.type == sf::Event::KeyPressed) {
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
                         for (int i = 0; i < shown_words.size(); i++) {
-                            Word *w = &shown_words.at(i);
-                            if (w->word == toLowerCase(input)) {
-                                points += w->worth;
+                            Word *wo = &shown_words.at(i);
+                            if (wo->word == toLowerCase(input)) {
+                                points += wo->worth;
                                 shown_words.erase(shown_words.begin() + i);
                                 break;
                             }
                         }
                         input = "";
-                        break;
                     }
                     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
                     {
                         input = input.substr(0, input.length()-1);
-                        break;
+                    }
+                    else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                    {
+                        state = GameScreenState::pauseresume;
                     }
                     std::string letter = sf::Keyboard::getDescription(sf::Keyboard::delocalize(event.key.code));
                     if (alphabet.find(letter) != std::string::npos) {
@@ -83,35 +105,78 @@ Game_Screen::Game_Screen(sf::Color background, sf::Color font_color, sf::Font fo
             window->draw(background_rec);
 
             for (int i = 0; i < shown_words.size(); i++) {
-                Word *w = &shown_words.at(i);
+                Word *wo = &shown_words.at(i);
+                //highlight
+                std::string highligh = "";
+                std::string not_highligh = "";
+                int n = 0;
+                for (auto &ch: wo->word)
+                {
+                    if (n!=-1 && n < input.length() && ch == tolower(input.at(n)))
+                    {
+                        highligh += ch;
+                        n++;
+                    }
+                    else{
+                        n = -1;
+                        not_highligh += ch;
+                    }
+
+                }
+                sf::Text highligh_text;
+                highligh_text.setPosition(wo->posx, wo->posy);
+                highligh_text.setString(highligh);
+                highligh_text.setFont(font);
+                highligh_text.setFillColor(sf::Color::Blue);
                 sf::Text text;
-                text.setPosition(w->posx, w->posy);
-                text.setString(w->word);
+                text.setPosition(wo->posx+highligh_text.getGlobalBounds().getSize().x, wo->posy);
+                text.setString(not_highligh);
                 text.setFont(font);
-                text.setFillColor(font_color);
-                w->accelerate();
-                if (w->posx == window->getSize().x)
+                text.setFillColor(appContainer->get_font_color().first);
+
+                wo->accelerate();
+                if (wo->posx == window->getSize().x)
                 {
                     health -= 1;
                     shown_words.erase(shown_words.begin() + i);
                     continue;
                 }
+                window->draw(highligh_text);
                 window->draw(text);
             }
-            if (health == 0)
-            {
+            if (health == 0){
                 state = GameScreenState::endPlayAgain;
             }
-            if (rand() % 20000 >= 19997 - (points - points % 100) / 100) {
-                shown_words.push_back(Word(&list_of_words));
+            if (points < 1300){
+                if (rand() % 20000 >= 19997 - (points - points % 50) / 50)
+                {
+                    int y = determine_word_pos();
+                    if (y != -1) {
+                        Word wo = Word(list_of_words, y);
+                        shown_words.push_back(wo);
+                    }
+                }
+            }
+            else{
+                if (rand() % 20000 >= 19970) {
+                    int y = determine_word_pos();
+                    if (y != -1) {
+                        Word wo = Word(list_of_words, y);
+                        shown_words.push_back(wo);
+                    }
+
+
+                }
             }
             points_text.setString(std::to_string(points));
             input_text.setString("[" + input + "]");
             window->draw(points_text);
             window->draw(input_text);
+
             window->display();
         }
-        else{
+        else if (state == GameScreenState::endPlayAgain)
+        {
             auto event = sf::Event();
             while (window->pollEvent(event)){
                 if (event.type == sf::Event::KeyPressed)
@@ -132,11 +197,10 @@ Game_Screen::Game_Screen(sf::Color background, sf::Color font_color, sf::Font fo
                                 state = GameScreenState::play;
                                 points = 0;
                                 shown_words.clear();
-                                read_file(file_name);
+                                read_file();
                                 break;
                             case GameScreenState::endGoBack:
                                 return;
-                                break;
                         }
                     }
                 }
@@ -161,24 +225,93 @@ Game_Screen::Game_Screen(sf::Color background, sf::Color font_color, sf::Font fo
             window->draw(play_again);
             window->draw(go_back);
             window->display();
+
+        }
+        else {
+            auto event = sf::Event();
+            while (window->pollEvent(event)){
+                if (event.type == sf::Event::KeyPressed)
+                {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                    {
+                        next_state();
+                    }
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                    {
+                        back_state();
+                    }
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+                    {
+                        switch (state)
+                        {
+                            case GameScreenState::pauseresume:
+                                state = GameScreenState::play;
+                                break;
+                            case GameScreenState::pausesave:
+                                appContainer->set_saved_game_words(shown_words);
+                                save_to_file();
+                                return;
+                        }
+                    }
+                }
+                if (event.type == sf::Event::Closed)
+                    window->close();
+            }
+            resume.setString("Resume");
+            resume.setStyle(sf::Text::Regular);
+            save.setString("Save");
+            save.setStyle(sf::Text::Regular);
+            switch (state)
+            {
+                case GameScreenState::pauseresume:
+                    resume.setString(">Resume<");
+                    resume.setStyle(sf::Text::Underlined);
+                    break;
+                case GameScreenState::pausesave:
+                    save.setString(">Save<");
+                    save.setStyle(sf::Text::Underlined);
+                    break;
+            }
+            window->draw(background_rec);
+            window->draw(resume);
+            window->draw(save);
+            window->display();
         }
     }
 }
 
-void Game_Screen::read_file(std::string file_name)
+void Game_Screen::read_file()
 {
-    std::ifstream file(file_name);
-    if (!file.is_open()) {
-        //error
-    }
-
-    std::string word;
-    while(std::getline(file, word))
+    std::vector<std::string> files_names;
+    switch(appContainer->get_game_option().first)
     {
-        list_of_words.push_back(word);
+        case game_state::short_words:
+            files_names.push_back("../words_short.txt");
+            break;
+        case game_state::medium_word:
+            files_names.push_back("../words_medium.txt");
+            break;
+        case game_state::long_words:
+            files_names.push_back("../words_long.txt");
+            break;
+        case game_state::all:
+            files_names.push_back("../words_short.txt");
+            files_names.push_back("../words_medium.txt");
+            files_names.push_back("../words_long.txt");
+            break;
     }
+    for(auto file_name: files_names) {
+        std::ifstream file(file_name);
+        if (!file.is_open()) {
+            //error
+        }
+        std::string word;
+        while (std::getline(file, word)) {
+            list_of_words.push_back(word);
+        }
 
-    file.close();
+        file.close();
+    }
 
 }
 
@@ -190,6 +323,11 @@ void Game_Screen::next_state()
             state = GameScreenState::endGoBack;
             break;
         case GameScreenState::endGoBack:
+            break;
+        case GameScreenState::pauseresume:
+            state = GameScreenState::pausesave;
+            break;
+        case GameScreenState::pausesave:
             break;
     }
 
@@ -203,6 +341,44 @@ void Game_Screen::back_state() {
         case GameScreenState::endGoBack:
             state = GameScreenState::endPlayAgain;
             break;
+        case GameScreenState::pauseresume:
+            break;
+        case GameScreenState::pausesave:
+            state = GameScreenState::pauseresume;
+            break;
     }
 }
 
+void Game_Screen::save_to_file()
+{
+    std::ofstream file("../save.txt");
+    if (!file.is_open()) {
+        //error
+    }
+    for (auto w: appContainer->return_word_list())
+    {
+        file<<w<<"\n";
+    }
+    file.close();
+}
+
+int Game_Screen::determine_word_pos() {
+    if (shown_words.empty())
+    {
+        return  rand()%500 + 10;
+    }
+    for(int n = 35; n<=510; n+=50) {
+        int k = 0;
+        for (const auto& word: shown_words) {
+            if (word.posy < n - 25 || word.posy > n + 25) {
+                k++;
+            }
+            else{
+                if (word.posx >= 70) {k++;}
+                else {break;}
+            }
+        }
+        if (k==shown_words.size()) {return  n;}
+    }
+    return -1;
+}

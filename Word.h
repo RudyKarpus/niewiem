@@ -7,12 +7,14 @@ class Word {
 public:
     std::string word;
     int worth;
-    int speed=0;
-    int posx=0;
+    int posx;
     int posy;
-
-    Word(std::vector<std::string> *words_list);
+    Word() = default;
+    Word(std::vector<std::string> &words_list, int posy);
+    ~Word(){}
     void accelerate();
+    friend std::ostream &operator<<(std::ostream  &os, Word &w);
+    friend std::istream &operator>>(std::istream &is, Word&w);
 };
 
 

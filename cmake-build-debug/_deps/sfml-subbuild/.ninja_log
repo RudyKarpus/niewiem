@@ -1,37 +1,37 @@
 # ninja log v6
 5	120	7395734200740195	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir	721e7275888d1cca
 5	120	7395734200740195	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir	721e7275888d1cca
-997	1186	7395793929350102	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
-7	501	7395793917661594	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
-501	627	7395793923784997	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
+931	1051	7399098227616320	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
+6	464	7399098217256452	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
+464	571	7399098222815349	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
 121	16393	7395734363467437	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download	aeb3eb6fc71f42f6
-7	501	7395793917661594	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
-501	627	7395793923784997	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
+6	464	7399098217256452	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
+464	571	7399098222815349	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
 121	16393	7395734363467437	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download	aeb3eb6fc71f42f6
-628	758	7395793925114988	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
-628	758	7395793925114988	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
-759	876	7395793926254993	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
-759	876	7395793926254993	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
-876	997	7395793927490091	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
-876	997	7395793927490091	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
-997	1186	7395793929350102	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
-1186	1478	7395793932250128	CMakeFiles/sfml-populate-complete	402455e1c809c670
-1186	1478	7395793932250128	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670
-1186	1478	7395793932250128	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete	402455e1c809c670
-1186	1478	7395793932250128	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670
-10	976	7395866608007473	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
-10	976	7395866608007473	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
-977	1193	7395866619659213	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
-977	1193	7395866619659213	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
-1195	1418	7395866621967382	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
-1195	1418	7395866621967382	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
-1419	2169	7395866629344159	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
-1419	2169	7395866629344159	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
-2169	2585	7395866633540360	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
-2169	2585	7395866633540360	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
-2586	3277	7395866639864514	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
-2586	3277	7395866639864514	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
-3278	4362	7395866651384262	CMakeFiles/sfml-populate-complete	402455e1c809c670
-3278	4362	7395866651384262	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670
-3278	4362	7395866651384262	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete	402455e1c809c670
-3278	4362	7395866651384262	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670
+571	698	7399098224087759	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
+571	698	7399098224087759	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
+699	822	7399098225349781	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
+699	822	7399098225349781	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
+822	931	7399098226408431	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
+822	931	7399098226408431	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
+931	1051	7399098227616320	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
+1051	1209	7399098229204410	CMakeFiles/sfml-populate-complete	402455e1c809c670
+1051	1209	7399098229204410	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670
+1051	1209	7399098229204410	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete	402455e1c809c670
+1051	1209	7399098229204410	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670
+6	387	7400160328732860	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
+6	387	7400160328732860	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	f84b4ba8474c1922
+387	494	7400160333529959	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
+387	494	7400160333529959	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	556ed624311d1cc4
+494	593	7400160334518016	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
+494	593	7400160334518016	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	7911c625a8a2bf5e
+594	699	7400160335579922	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
+594	699	7400160335579922	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	7f94b4b6834bdbc0
+699	802	7400160336610580	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
+699	802	7400160336610580	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	24029421e6f44915
+803	903	7400160337608671	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
+803	903	7400160337608671	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	e97d2c53bc0bcb1e
+903	1041	7400160339007214	CMakeFiles/sfml-populate-complete	402455e1c809c670
+903	1041	7400160339007214	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670
+903	1041	7400160339007214	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete	402455e1c809c670
+903	1041	7400160339007214	C:/Users/Mistrz Karp/CLionProjects/fml/cmake-build-debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	402455e1c809c670

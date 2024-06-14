@@ -1,8 +1,9 @@
 #include <iostream>
 #include "start_screen.h"
-#include <SFML/Graphics.hpp>
+#include "app_container.h"
 
 int main() {
-    Start_Screen startScreen;
+    App_Container container;
+    Start_Screen startScreen(&container);
     return 0;
 }

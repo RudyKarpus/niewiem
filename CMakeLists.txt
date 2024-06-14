@@ -33,6 +33,10 @@ add_executable(fml main.cpp
         Word.cpp
         Word.h
         Word.h
+        options_window.cpp
+        options_window.h
+        app_container.cpp
+        app_container.h
 )
 target_link_libraries(fml fmt sfml-graphics)
 

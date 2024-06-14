@@ -1,13 +1,20 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#pragma  once
 #ifndef FML_CONSTANTS_H
 #define FML_CONSTANTS_H
+
 std::pair<sf::Color, std::string> color_list[7] = {{sf::Color::White, "white"}, {sf::Color::Black, "black"},
                                                      {sf::Color::Red, "red"}, {sf::Color::Blue, "blue"},
                                                      {sf::Color::Yellow, "yellow"},{sf::Color::Green, "green"},
                                                      {sf::Color::Cyan, "Cyan"}};
 
-std::string font_list[7] = {"Lato", "Montserrat", "NunitoSans", "OpenSans", "PlayfairDisplay", "Poppins", "Roboto"};
+std::vector<std::string> font_list = {"Lato", "Montserrat", "NunitoSans", "OpenSans", "PlayfairDisplay", "Poppins", "Roboto"};
+
+std::vector<std::pair<game_state, std::string>> game_word_options = {{game_state::short_words, "short words"},
+                                                          {game_state::medium_word, "medium words"},
+                                                          {game_state::long_words, "long words"},
+                                                          {game_state::all, "all"}};
 
 
 

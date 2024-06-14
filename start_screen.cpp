@@ -1,13 +1,15 @@
 #include "start_screen.h"
-#include "constants.h"
 #include <cmath>
 #include <SFML/Graphics.hpp>
 #include "game_screen.h"
+#include "options_window.h"
 
 
 
-Start_Screen::Start_Screen()
+Start_Screen::Start_Screen(App_Container* container)
 {
+    this->appContainer = container;
+    appContainer->get_saved_data();
     auto window = sf::RenderWindow(
             sf::VideoMode({800, 600}), "",
             sf::Style::Default, sf::ContextSettings(0, 0, 8)
@@ -15,132 +17,92 @@ Start_Screen::Start_Screen()
 
     auto background = sf::RectangleShape(sf::Vector2f(800, 600));
     background.setPosition(0, 0);
-    sf::Text background_text;
-    background_text.setPosition(50, 200);
-    background_text.setCharacterSize(30);
-    sf::Text font_color_text;
-    font_color_text.setPosition(300, 200);
-    font_color_text.setCharacterSize(30);
-    sf::Text font_text;
-    font_text.setPosition(500, 200);
-    font_text.setCharacterSize(30);
+    background.setFillColor(appContainer->get_background().first);
+    sf::Font f;
+    if (!f.loadFromFile("../fonts/"+appContainer->get_font() + ".ttf"))
+    {
+        // error...
+    }
     sf::Text start_text;
-    start_text.setPosition(350, 400);
+    start_text.setPosition(350, 100);
     start_text.setCharacterSize(30);
+    sf::Text options_text;
+    options_text.setPosition(350, 200);
+    options_text.setCharacterSize(30);
+    sf::Text load_save;
+    load_save.setPosition(308, 300);
+    load_save.setCharacterSize(30);
     while (window.isOpen()) {
         auto event = sf::Event();
-        sf::Font f;
-        if (!f.loadFromFile("../fonts/"+font + ".ttf"))
-        {
-            // error...
-        }
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::KeyPressed)
             {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-                {
-                    checked_back();
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                {
-                    checked_next();
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-                {
-                    state_next();
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
                 {
                     state_back();
                 }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                {
+                    state_next();
+                }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
                 {
-                    Game_Screen game_screen(background_color.first, font_color.first, f, &window);
+                    switch (checked)
+                    {
+                        case StartScreenState::start: {
+                            std::vector<Word> list;
+                            Game_Screen game_screen(appContainer, &window, list);
+                            break;
+                        }
+                        case StartScreenState::options: {
+                            Options_Window optionsWindow(appContainer, &window);
+                            break;
+                        }
+                        case StartScreenState::load_last_save: {
+                            Game_Screen game_screen(appContainer, &window, appContainer->return_word_list());
+                            break;
+                        }
+                    }
                 }
 
             }
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        background_text.setFont(f);
-        background_text.setFillColor(font_color.first);
-        background_text.setString(background_color.second);
-        background_text.setStyle(sf::Text::Regular);
-        font_color_text.setFont(f);
-        font_color_text.setFillColor(font_color.first);
-        font_color_text.setString(font_color.second);
-        font_color_text.setStyle(sf::Text::Regular);
-        font_text.setFont(f);
-        font_text.setFillColor(font_color.first);
-        font_text.setString(font);
-        font_text.setStyle(sf::Text::Regular);
-        start_text.setFont(f);
-        start_text.setFillColor(font_color.first);
+        background.setFillColor(appContainer->get_background().first);
         start_text.setString("Start");
         start_text.setStyle(sf::Text::Regular);
+        start_text.setFont(f);
+        start_text.setFillColor(appContainer->get_font_color().first);
+        options_text.setString("Options");
+        options_text.setStyle(sf::Text::Regular);
+        options_text.setFont(f);
+        options_text.setFillColor(appContainer->get_font_color().first);
+        load_save.setString("Load last game");
+        load_save.setStyle(sf::Text::Regular);
+        load_save.setFont(f);
+        load_save.setFillColor(appContainer->get_font_color().first);
         switch (checked) {
-            case StartScreenState::background:
-                background_text.setString(">"+background_color.second+"<");
-                background_text.setStyle(sf::Text::Underlined);
-                break;
-            case StartScreenState::font_color:
-                font_color_text.setString(">"+font_color.second+"<");
-                font_color_text.setStyle(sf::Text::Underlined);
-                break;
-            case StartScreenState::font:
-                font_text.setString(">"+font+"<");
-                font_text.setStyle(sf::Text::Underlined);
-                break;
             case StartScreenState::start:
                 start_text.setString(">Start<");
                 start_text.setStyle(sf::Text::Underlined);
                 break;
+            case StartScreenState::options:
+                options_text.setString(">Options<");
+                options_text.setStyle(sf::Text::Underlined);
+                break;
+            case StartScreenState::load_last_save:
+                load_save.setString(">Load last game<");
+                load_save.setStyle(sf::Text::Underlined);
+                break;
         }
 
 
-        background.setFillColor(background_color.first);
         window.draw(background);
-        window.draw(background_text);
-        window.draw(font_color_text);
-        window.draw(font_text);
         window.draw(start_text);
+        window.draw(options_text);
+        window.draw(load_save);
         window.display();
-    }
-}
-
-void Start_Screen::checked_next()
-{
-    switch(checked)
-    {
-        case StartScreenState::background:
-            checked = StartScreenState::font_color;
-            break;
-        case StartScreenState::font_color:
-            checked = StartScreenState::font;
-            break;
-        case StartScreenState::font:
-            checked = StartScreenState::start;
-            break;
-        case StartScreenState::start:
-            break;
-    }
-}
-
-void Start_Screen::checked_back()
-{
-    switch(checked)
-    {
-        case StartScreenState::background:
-            break;
-        case StartScreenState::font_color:
-            checked = StartScreenState::background;
-            break;
-        case StartScreenState::font:
-            checked = StartScreenState::font_color;
-            break;
-        case StartScreenState::start:
-            checked = StartScreenState::font;
-            break;
     }
 }
 
@@ -148,98 +110,29 @@ void Start_Screen::state_next()
 {
     switch(checked)
     {
-        case StartScreenState::background:
-            set_next_color(&background_color);
-            break;
-        case StartScreenState::font_color:
-            set_next_color(&font_color);
-            break;
-        case StartScreenState::font:
-            set_previous_font();
-            break;
         case StartScreenState::start:
-            return;
+            checked = StartScreenState::options;
+            break;
+        case StartScreenState::options:
+            checked = StartScreenState::load_last_save;
+            break;
+        case StartScreenState::load_last_save:
+            break;
     }
 }
 
-void Start_Screen::set_next_color(std::pair<sf::Color, std::string>* color)
+void Start_Screen::state_back()
 {
-    int n = 0;
-    for(auto col: color_list)
-    {
-        if(col.second == color->second){break;}
-        n++;
-    }
-    if(n==6)
-    {
-        *color = color_list[0];
-        return;
-    }
-    *color = color_list[n + 1];
-}
-
-void Start_Screen::state_back() {
     switch(checked)
     {
-        case StartScreenState::background:
-            set_previous_color(&background_color);
-            break;
-        case StartScreenState::font_color:
-            set_previous_color(&font_color);
-            break;
-        case StartScreenState::font:
-            set_next_font();
-            break;
         case StartScreenState::start:
-            return;
+            break;
+        case StartScreenState::options:
+            checked = StartScreenState::start;
+            break;
+        case StartScreenState::load_last_save:
+            checked = StartScreenState::options;
+            break;
     }
 }
 
-void Start_Screen::set_previous_color(std::pair<sf::Color, std::string>* color)
-{
-    int n = 0;
-    for(auto col: color_list)
-    {
-        if(col.second == color->second){break;}
-        n++;
-    }
-    if(n==0)
-    {
-        *color = color_list[6];
-        return;
-    }
-    *color = color_list[n - 1];
-}
-
-
-void Start_Screen::set_next_font()
-{
-    int n = 0;
-    for(auto font_name: font_list)
-    {
-        if(font_name == font){break;}
-        n++;
-    }
-    if(n == 6)
-    {
-        font = font_list[0];
-        return;
-    }
-    font = font_list[n + 1];
-}
-
-void Start_Screen::set_previous_font()
-{
-    int n = 0;
-    for(auto font_name: font_list)
-    {
-        if(font_name == font){break;}
-        n++;
-    }
-    if(n == 0)
-    {
-        font = font_list[6];
-        return;
-    }
-    font = font_list[n - 1];
-}

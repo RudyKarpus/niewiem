@@ -2,30 +2,22 @@
 #define FML_START_SCREEN_H
 #pragma once
 #include "fmt/color.h"
+#include "app_container.h"
 #include <SFML/Graphics.hpp>
 
 
-enum class StartScreenState{background, font_color, font, start};
+enum class StartScreenState{start, options, load_last_save};
 
 
 class Start_Screen {
 private:
-    std::pair<sf::Color, std::string> background_color = { sf::Color::Black, "black"};
-    std::pair<sf::Color, std::string> font_color = {sf::Color::White, "white"};
-    std::string font = "Lato";
-    StartScreenState checked = StartScreenState::background;
+    App_Container* appContainer;
+    StartScreenState checked = StartScreenState::start;
 
 public:
-    Start_Screen();
-    void display();
-    void checked_next();
-    void checked_back();
+    Start_Screen(App_Container* container);
     void state_next();
-    void set_next_color(std::pair<sf::Color, std::string>* color);
     void state_back();
-    void set_previous_color(std::pair<sf::Color, std::string>* color);
-    void set_next_font();
-    void set_previous_font();
 };
 
 
