@@ -1,6 +1,7 @@
 #include <fstream>
 #include "app_container.h"
 #include "constants.h"
+#include "exceptions.h"
 
 std::pair<sf::Color, std::string> App_Container::get_background() { return background;}
 
@@ -9,6 +10,8 @@ std::pair<sf::Color, std::string> App_Container::get_font_color() {return font_c
 std::string App_Container::get_font() {return font;}
 
 std::pair<game_state, std::string> App_Container::get_game_option() {return game_option;}
+
+std::pair<int, int> App_Container::get_saved_game_state() {return saved_game_state;}
 
 void App_Container::set_game_option(std::pair<game_state, std::string> new_game_option) {this->game_option = new_game_option;}
 
@@ -135,17 +138,33 @@ void App_Container::set_saved_game_words(std::vector<Word> saved_game_words) {
 void App_Container::get_saved_data() {
     std::ifstream file("../save.txt");
     if (!file.is_open()) {
-        //error
+        FileOpenFailedException exception;
+        throw  exception;
     }
+    std::string state;
+    std::string points;
+    std::string health;
+    std::getline(file, state);
+    std::getline(file, points);
+    std::getline(file, health);
+    while(game_option.second != state) {set_next_game_option();}
+    saved_game_state.first = std::stoi(points);
+    saved_game_state.second = std::stoi(health);
     Word w;
     while (file >> w){
         saved_game_words.push_back(w);
     }
+
+
     file.close();
 }
 
 std::vector<Word> App_Container::return_word_list() {
     return saved_game_words;
 }
+
+
+
+
 
 

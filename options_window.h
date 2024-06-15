@@ -14,7 +14,6 @@ private:
     OptionsScreenState checked = OptionsScreenState::background;
 public:
     Options_Window(App_Container* container, sf::RenderWindow *w);
-    void clicked_next();
     void state_next();
     void state_back();
 };

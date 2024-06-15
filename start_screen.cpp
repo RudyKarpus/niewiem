@@ -1,15 +1,13 @@
 #include "start_screen.h"
-#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "game_screen.h"
 #include "options_window.h"
-
+#include "exceptions.h"
 
 
 Start_Screen::Start_Screen(App_Container* container)
 {
     this->appContainer = container;
-    appContainer->get_saved_data();
     auto window = sf::RenderWindow(
             sf::VideoMode({800, 600}), "",
             sf::Style::Default, sf::ContextSettings(0, 0, 8)
@@ -21,7 +19,8 @@ Start_Screen::Start_Screen(App_Container* container)
     sf::Font f;
     if (!f.loadFromFile("../fonts/"+appContainer->get_font() + ".ttf"))
     {
-        // error...
+        FileOpenFailedException exception;
+        throw  exception;
     }
     sf::Text start_text;
     start_text.setPosition(350, 100);
@@ -59,13 +58,33 @@ Start_Screen::Start_Screen(App_Container* container)
                             break;
                         }
                         case StartScreenState::load_last_save: {
-                            Game_Screen game_screen(appContainer, &window, appContainer->return_word_list());
+                            appContainer->get_saved_data();
+                            Game_Screen game_screen(appContainer, &window, appContainer->return_word_list(), appContainer->get_saved_game_state().first, appContainer->get_saved_game_state().second);
                             break;
                         }
                     }
                 }
 
             }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+                sf::Vector2f worldPosition = window.mapPixelToCoords(mousePosition);
+                if (start_text.getGlobalBounds().contains(worldPosition))
+                {
+                    std::vector<Word> list;
+                    Game_Screen game_screen(appContainer, &window, list);
+                }
+                else if (options_text.getGlobalBounds().contains(worldPosition))
+                {
+                    Options_Window optionsWindow(appContainer, &window);
+                }
+                else if (load_save.getGlobalBounds().contains(worldPosition))
+                {
+                    appContainer->get_saved_data();
+                    Game_Screen game_screen(appContainer, &window, appContainer->return_word_list(), appContainer->get_saved_game_state().first, appContainer->get_saved_game_state().second);
+                }
+            }
+
             if (event.type == sf::Event::Closed)
                 window.close();
         }

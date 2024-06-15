@@ -2,9 +2,15 @@
 #include "game_screen.h"
 #include <fstream>
 #include<cstdlib>
+#include "exceptions.h"
 
 std::string static alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+std::pair<sf::Color, std::pair<sf::Color, sf::Color>> highlight_list[7] = {
+        {sf::Color::White, {sf::Color::Black, sf::Color::Red}}, {sf::Color::Black, {sf::Color::White, sf::Color::Yellow}},
+        {sf::Color::Red, {sf::Color::Green, sf::Color::Blue}}, {sf::Color::Blue, {sf::Color::Red, sf::Color::Yellow}},
+        {sf::Color::Yellow, {sf::Color::Black, sf::Color::Cyan}}, {sf::Color::Green, {sf::Color::Red, sf::Color::Blue}},
+        {sf::Color::Cyan, {sf::Color::Black, sf::Color::Green}}};
 
 std::string toLowerCase(const std::string& str) {
     std::string lowerStr = str;
@@ -13,10 +19,11 @@ std::string toLowerCase(const std::string& str) {
     return lowerStr;
 }
 
-
-Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vector<Word> words)
+Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vector<Word> words, int p, int h)
 {
     this->appContainer = container;
+    this->points = p;
+    this->health = h;
     if (!words.empty()) {this->shown_words = words;}
     //prepeare screen
     this->window = w;
@@ -29,7 +36,8 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
     sf::Font font;
     if (!font.loadFromFile("../fonts/"+appContainer->get_font() + ".ttf"))
     {
-        // error...
+        FileOpenFailedException exception;
+        throw  exception;
     }
     sf::Text input_text;
     input_text.setPosition(10, 560);
@@ -37,11 +45,17 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
     input_text.setFillColor(appContainer->get_font_color().first);
     input_text.setFont(font);
     sf::Text points_text;
-    points_text.setPosition(500, 560);
+    points_text.setPosition(400, 560);
     points_text.setCharacterSize(24);
     points_text.setFillColor(appContainer->get_font_color().first);
     points_text.setFont(font);
     points_text.setStyle(sf::Text::Underlined);
+    sf::Text health_text;
+    health_text.setPosition(500, 560);
+    health_text.setCharacterSize(24);
+    health_text.setFillColor(appContainer->get_font_color().first);
+    health_text.setFont(font);
+    health_text.setStyle(sf::Text::Underlined);
     sf::Text result_text;
     result_text.setPosition(400, 300);
     result_text.setCharacterSize(30);
@@ -67,6 +81,20 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
     save.setCharacterSize(30);
     save.setFillColor(appContainer->get_font_color().first);
     save.setFont(font);
+    //determine highlight color
+    sf::Color color_highligh;
+    for (auto c: highlight_list)
+    {
+        if (c.first == appContainer->get_background().first)
+        {
+            if (c.second.first == appContainer->get_font_color().first){
+                color_highligh = c.second.second;
+            }
+            else{
+                color_highligh = c.second.first;
+            }
+        }
+    }
     while (window->isOpen())
     {
         if (state == GameScreenState::play)
@@ -127,7 +155,7 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
                 highligh_text.setPosition(wo->posx, wo->posy);
                 highligh_text.setString(highligh);
                 highligh_text.setFont(font);
-                highligh_text.setFillColor(sf::Color::Blue);
+                highligh_text.setFillColor(color_highligh);
                 sf::Text text;
                 text.setPosition(wo->posx+highligh_text.getGlobalBounds().getSize().x, wo->posy);
                 text.setString(not_highligh);
@@ -168,14 +196,16 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
 
                 }
             }
+            health_text.setString("Health: " + std::to_string(health));
             points_text.setString(std::to_string(points));
             input_text.setString("[" + input + "]");
+            window->draw(health_text);
             window->draw(points_text);
             window->draw(input_text);
 
             window->display();
         }
-        else if (state == GameScreenState::endPlayAgain)
+        else if (state == GameScreenState::endPlayAgain || state == GameScreenState::endGoBack)
         {
             auto event = sf::Event();
             while (window->pollEvent(event)){
@@ -202,6 +232,22 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
                             case GameScreenState::endGoBack:
                                 return;
                         }
+                    }
+                }
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
+                    sf::Vector2f worldPosition = window->mapPixelToCoords(mousePosition);
+
+                    if (play_again.getGlobalBounds().contains(worldPosition))
+                    {
+                        state = GameScreenState::play;
+                        points = 0;
+                        shown_words.clear();
+                        read_file();
+                    }
+                    else if (go_back.getGlobalBounds().contains(worldPosition))
+                    {
+                        return;
                     }
                 }
                 if (event.type == sf::Event::Closed)
@@ -254,6 +300,20 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
                         }
                     }
                 }
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
+                    sf::Vector2f worldPosition = window->mapPixelToCoords(mousePosition);
+                    if (resume.getGlobalBounds().contains(worldPosition))
+                    {
+                        state = GameScreenState::play;
+                    }
+                    else if (save.getGlobalBounds().contains(worldPosition))
+                    {
+                        appContainer->set_saved_game_words(shown_words);
+                        save_to_file();
+                        return;
+                    }
+                }
                 if (event.type == sf::Event::Closed)
                     window->close();
             }
@@ -303,7 +363,8 @@ void Game_Screen::read_file()
     for(auto file_name: files_names) {
         std::ifstream file(file_name);
         if (!file.is_open()) {
-            //error
+            FileOpenFailedException exception;
+            throw  exception;
         }
         std::string word;
         while (std::getline(file, word)) {
@@ -353,8 +414,11 @@ void Game_Screen::save_to_file()
 {
     std::ofstream file("../save.txt");
     if (!file.is_open()) {
-        //error
+        FileOpenFailedException exception;
+        throw  exception;
     }
+    file<<appContainer->get_game_option().second<<"\n";
+    file<<points<<"\n"<<health<<"\n";
     for (auto w: appContainer->return_word_list())
     {
         file<<w<<"\n";
@@ -382,3 +446,8 @@ int Game_Screen::determine_word_pos() {
     }
     return -1;
 }
+
+int Game_Screen::getHealth() {return health;}
+
+int Game_Screen::getPoints() {return points;}
+

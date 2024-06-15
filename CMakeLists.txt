@@ -37,6 +37,7 @@ add_executable(fml main.cpp
         options_window.h
         app_container.cpp
         app_container.h
+        exceptions.h
 )
 target_link_libraries(fml fmt sfml-graphics)
 

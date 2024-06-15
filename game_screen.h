@@ -15,16 +15,19 @@ private:
     std::string input = "";
     std::vector<Word> shown_words;
     std::vector<std::string> list_of_words;
-    int points = 0;
-    int health = 3;
+    int points;
+    int health;
     GameScreenState state = GameScreenState::play;
 public:
-    Game_Screen(App_Container* container, sf::RenderWindow *w, std::vector<Word> shown_words);
+    Game_Screen(App_Container* container, sf::RenderWindow *w, std::vector<Word> shown_words, int points = 0, int health = 3);
     void read_file();
     void next_state();
     void back_state();
     void save_to_file();
     int determine_word_pos();
+    int getPoints();
+    int getHealth();
+
 };
 
 

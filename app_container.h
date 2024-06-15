@@ -14,6 +14,7 @@ private:
     std::string font = "Lato";
     std::pair<game_state, std::string> game_option = {game_state::all, "all"};
     std::vector<Word> saved_game_words;
+    std::pair<int, int> saved_game_state;
 public:
     App_Container() = default;
     void get_saved_data();
@@ -22,6 +23,7 @@ public:
     std::pair<sf::Color, std::string> get_font_color();
     std::string get_font();
     std::pair<game_state, std::string> get_game_option();
+    std::pair<int, int> get_saved_game_state();
     void set_saved_game_words(std::vector<Word> saved_game_words);
     void set_game_option(std::pair<game_state, std::string> new_game_option);
     void set_next_color(color_type type);
@@ -30,6 +32,7 @@ public:
     void set_previous_font();
     void set_next_game_option();
     void set_previous_game_option();
+    friend std::ostream &operator<<(std::ostream  &os, App_Container &app);
 };
 
 

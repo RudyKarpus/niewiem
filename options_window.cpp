@@ -1,4 +1,5 @@
 #include "options_window.h"
+#include "exceptions.h"
 
 Options_Window::Options_Window(App_Container* container, sf::RenderWindow *w)
 {
@@ -74,13 +75,15 @@ Options_Window::Options_Window(App_Container* container, sf::RenderWindow *w)
                     return;
                 }
             }
+
             if (event.type == sf::Event::Closed)
                 window->close();
         }
         sf::Font f;
         if (!f.loadFromFile("../fonts/"+appContainer->get_font() + ".ttf"))
         {
-            // error...
+            FileOpenFailedException exception;
+            throw  exception;
         }
 
         background.setFillColor(appContainer->get_background().first);
@@ -129,23 +132,7 @@ Options_Window::Options_Window(App_Container* container, sf::RenderWindow *w)
     }
 }
 
-void Options_Window::clicked_next()
-{
-    switch(checked)
-    {
-        case OptionsScreenState::background:
-            appContainer->set_next_color(color_type::background);
-            break;
-        case OptionsScreenState::font_color:
-            appContainer->set_next_color(color_type::font_color);
-            break;
-        case OptionsScreenState::font:
-            appContainer->set_next_font();
-            break;
-        case OptionsScreenState::game_mode:
-            break;
-    }
-}
+
 
 void Options_Window::state_next() {
     switch(checked)
