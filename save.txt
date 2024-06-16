@@ -1,4 +1,7 @@
 short words
-111
+565
 3
-fox 115 1 383
+nut 67 20 135
+so 51 6 185
+rebel 78 12 235
+sip 72 5 35

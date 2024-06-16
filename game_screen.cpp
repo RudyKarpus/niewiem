@@ -242,6 +242,7 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
                     {
                         state = GameScreenState::play;
                         points = 0;
+                        health = 3;
                         shown_words.clear();
                         read_file();
                     }
@@ -294,7 +295,6 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
                                 state = GameScreenState::play;
                                 break;
                             case GameScreenState::pausesave:
-                                appContainer->set_saved_game_words(shown_words);
                                 save_to_file();
                                 return;
                         }
@@ -309,7 +309,6 @@ Game_Screen::Game_Screen(App_Container* container, sf::RenderWindow *w, std::vec
                     }
                     else if (save.getGlobalBounds().contains(worldPosition))
                     {
-                        appContainer->set_saved_game_words(shown_words);
                         save_to_file();
                         return;
                     }
@@ -419,7 +418,7 @@ void Game_Screen::save_to_file()
     }
     file<<appContainer->get_game_option().second<<"\n";
     file<<points<<"\n"<<health<<"\n";
-    for (auto w: appContainer->return_word_list())
+    for (auto w: shown_words)
     {
         file<<w<<"\n";
     }
@@ -438,7 +437,7 @@ int Game_Screen::determine_word_pos() {
                 k++;
             }
             else{
-                if (word.posx >= 70) {k++;}
+                if (word.posx >= 100) {k++;}
                 else {break;}
             }
         }

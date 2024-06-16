@@ -31,6 +31,13 @@ Start_Screen::Start_Screen(App_Container* container)
     sf::Text load_save;
     load_save.setPosition(308, 300);
     load_save.setCharacterSize(30);
+    sf::Text instruction;
+    instruction.setPosition(40, 450);
+    instruction.setCharacterSize(22);
+    instruction.setFont(f);
+    instruction.setString("<, >, ^, v use to move through aplication or click on text. \n"
+                          "^ and v is  also used to change setting in options. \n"
+                          "Use Escape to pause game or go back in options screen");
     while (window.isOpen()) {
         auto event = sf::Event();
         while (window.pollEvent(event)) {
@@ -97,10 +104,11 @@ Start_Screen::Start_Screen(App_Container* container)
         options_text.setStyle(sf::Text::Regular);
         options_text.setFont(f);
         options_text.setFillColor(appContainer->get_font_color().first);
-        load_save.setString("Load last game");
+        load_save.setString("Load save");
         load_save.setStyle(sf::Text::Regular);
         load_save.setFont(f);
         load_save.setFillColor(appContainer->get_font_color().first);
+        instruction.setFillColor(appContainer->get_font_color().first);
         switch (checked) {
             case StartScreenState::start:
                 start_text.setString(">Start<");
@@ -111,16 +119,16 @@ Start_Screen::Start_Screen(App_Container* container)
                 options_text.setStyle(sf::Text::Underlined);
                 break;
             case StartScreenState::load_last_save:
-                load_save.setString(">Load last game<");
+                load_save.setString(">Load save<");
                 load_save.setStyle(sf::Text::Underlined);
                 break;
         }
-
 
         window.draw(background);
         window.draw(start_text);
         window.draw(options_text);
         window.draw(load_save);
+        window.draw(instruction);
         window.display();
     }
 }
