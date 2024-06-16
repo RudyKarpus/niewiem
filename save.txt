@@ -1,7 +1,7 @@
 short words
-565
+213
 3
-nut 67 20 135
-so 51 6 185
-rebel 78 12 235
-sip 72 5 35
+agree 81 541 85
+post 122 457 135
+press 62 108 35
+tire 113 3 85
